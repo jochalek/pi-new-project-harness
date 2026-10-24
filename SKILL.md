@@ -28,8 +28,11 @@ session continuity.
 
 1. **Inspect before editing.** Confirm the repository root. Read existing `AGENTS.md` files,
    README and project/product/architecture docs, manifests and lockfiles, CI workflows, tests,
-   and existing setup/verification scripts. Check git status. Use evidence from the repository;
-   do not infer that a blank or incomplete project has a particular product design.
+   and existing setup/verification scripts. Check git status and whether this is already a Git
+   repository. Prefer Git for project change tracking: if this is a new project without Git, run
+   `git init` unless the user or project policy says not to. Never reinitialize an existing repo.
+   Use evidence from the repository; do not infer that a blank or incomplete project has a
+   particular product design.
 2. **Protect existing work.** If any target file exists, read it and preserve useful content.
    Never replace or truncate an existing file. Add missing guidance or merge only after explaining
    the proposed change. Ask before making a change that would remove or materially rewrite existing
@@ -59,12 +62,18 @@ session continuity.
    lockfile-respecting/frozen installs, include only checks that exist, and fail clearly if required
    tools are absent. Do not make initialization destructive or silently start a long-running server.
    Make it executable (`chmod +x init.sh`). Do not add dependencies or alter toolchain config just
-   to make the harness look complete.
+   to make the harness look complete. If this is a new project and not yet a Git repository, use
+   `git init` as described above, then track the harness files.
 7. **Validate.** Parse `feature-list.json`; run `bash -n init.sh`; inspect the diff and verify that
    commands and paths exist. Do not run dependency installation, migrations, or other side-effecting
    initialization unless the user asks or confirms. If safe and useful, run only non-destructive
    checks. Do not claim tests passed if they were not run.
-8. **Handoff.** Summarize files created or updated, assumptions and questions, validation run, and
+8. **Track and commit.** Keep project changes in Git. After applicable tests and verification
+   pass, prefer committing the changes with a clear, scoped message. Stage only files for this
+   task; do not include unrelated user changes. Do not commit if checks fail, were not run, or the
+   work is incomplete. Report the checks and commit outcome. If no tests or checks exist, do not
+   claim they passed; explain this and ask before making a commit based only on other validation.
+9. **Handoff.** Summarize files created or updated, assumptions and questions, validation run, and
    the next action. Explain that the user should replace any explicitly marked feature placeholders.
 
 ## Project-specific adaptation
